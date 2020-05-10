@@ -4,7 +4,8 @@
   "description": "Additional features to streamline work with YNAB app",
   "main": "index.js",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "build:dev": "webpack --mode development"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,11 @@
   },
   "homepage": "https://github.com/gordonsh24/ynab-extension#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "ramda": "^0.27.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.0"
+  }
 }
