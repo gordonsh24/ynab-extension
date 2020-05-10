@@ -1,0 +1,23 @@
+{
+  "name": "ynab-extension",
+  "version": "0.0.1",
+  "description": "Additional features to streamline work with YNAB app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gordonsh24/ynab-extension.git"
+  },
+  "author": "Jakub Bis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gordonsh24/ynab-extension/issues"
+  },
+  "homepage": "https://github.com/gordonsh24/ynab-extension#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {}
+}
