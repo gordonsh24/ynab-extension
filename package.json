@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
-    "build:dev": "webpack --mode development"
+    "build:dev": "webpack --mode development",
+    "build:prod": "webpack -p --env production --mode production"
   },
   "repository": {
     "type": "git",
@@ -18,10 +19,18 @@
   },
   "homepage": "https://github.com/gordonsh24/ynab-extension#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.8.7",
+    "babel-loader": "^8.1.0",
+    "core-js": "^3.6.5",
     "express": "^4.17.1",
     "ramda": "^0.27.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-arrow-functions": "^7.8.3",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.0"
   }

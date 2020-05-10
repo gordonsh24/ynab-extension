@@ -1,3 +1,4 @@
-var a = 10;
+import * as R from "ramda"
 
-console.log("Hello " + a);
+const list = [1, 2, 3];
+R.forEach(el => console.log(`Hello ${el}`))(list)

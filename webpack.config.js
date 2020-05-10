@@ -6,4 +6,13 @@ module.exports = {
 		filename: 'app.js',
 		path: path.resolve(__dirname, 'public', 'dist', 'js'),
 	},
+	module: {
+		rules: [
+			{
+				loader:  'babel-loader',
+				test:    /\.js$/,
+				exclude: /node_modules/
+			}
+		]
+	}
 };
