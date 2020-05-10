@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { DatePicker } from 'antd';
 
-import "../css/app.css";
+import "../scss/app.scss";
 
 const root = document.getElementById("app");
 
