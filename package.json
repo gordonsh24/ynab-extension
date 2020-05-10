@@ -20,12 +20,15 @@
   "homepage": "https://github.com/gordonsh24/ynab-extension#readme",
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
+    "antd": "^4.2.0",
     "babel-loader": "^8.1.0",
     "core-js": "^3.6.5",
+    "css-loader": "^3.5.3",
     "express": "^4.17.1",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "style-loader": "^1.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -33,6 +36,7 @@
     "@babel/plugin-transform-arrow-functions": "^7.8.3",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
+    "babel-plugin-import": "^1.13.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.0"
   }
