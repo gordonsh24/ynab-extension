@@ -1,26 +1,38 @@
-import * as R from "ramda"
+import fetch from 'cross-fetch';
 import React from "react";
 import ReactDOM from "react-dom";
-import { DatePicker } from 'antd';
+import ExchangeCurrency from "./ExchangeCurrency";
 
 import "../scss/app.scss";
 
 const root = document.getElementById("app");
 
-console.log(process.env.FIXER_TOKEN);
 
-fetch(`http://data.fixer.io/api/latest?access_key=${process.env.FIXER_TOKEN}`)
-	.then(response => response.json())
-	.then(data => console.log(data));
+const exchangeCurrency = ExchangeCurrency(fetch, window.localStorage);
+(async () => {
+	const p1 = await exchangeCurrency('PLN', 'USD', 3);
+	const p2 = await exchangeCurrency('PHP', 'USD', 150);
+	const p3 = await exchangeCurrency('USD', 'USD', 10);
+	const p4 = await exchangeCurrency('PLN', 'GBP', 10);
 
-const list = [1, 2, 3];
-const renderList = R.map(el => <p key={el}>EL: {el}</p>)
+	const app = () => (
+		<div>
+			<p>
+				3 PLN to USD is: {p1.value}
+			</p>
+			<p>
+				150 PHP to USD is: {p2.value}
+			</p>
+			<p>
+				10 USD to USD is: {p3.value}
+			</p>
+			<p>
+				10 PLN to GBP is: {p4.value}
+			</p>
+		</div>
+	);
 
-const app = () => (
-	<div>
-		{renderList(list)}
-		<DatePicker />
-	</div>
-);
+	ReactDOM.render(app(), root);
+})();
 
-ReactDOM.render(app(), root);
+

@@ -1,6 +1,7 @@
 import * as R from "ramda"
-import {Either} from "monet";
-import {getRatesFromAPI} from "../src/js/ExchangeCurrency";
+import {Either, Right} from "monet";
+import ExchangeCurrency from "../src/js/ExchangeCurrency";
+import MemoryStorage from "../src/js/Cache/MemoryStorage";
 
 const successAPIResponse = {
 	success: true,
@@ -15,42 +16,67 @@ const successAPIResponse = {
 	}
 };
 
-const createResponse = data => ({
-	json: R.always(data)
+
+test('it converts currencies', async () => {
+	const fetch = R.always(Promise.resolve({
+		json: jest.fn(R.always(successAPIResponse))
+	}));
+	const storage = new MemoryStorage();
+
+	const convert = ExchangeCurrency(fetch, storage);
+
+	let source = 'PLN';
+	let target = 'USD';
+	let value = 3;
+
+	let result = await convert(source, target, value);
+	expect(result.value).toEqual(0.708);
+
+	source = 'PHP';
+	target = 'USD';
+	value = 150;
+
+	result = await convert(source, target, value);
+	expect(result.value).toEqual(3);
+
+	source = 'USD';
+	target = 'USD';
+	value = 5;
+
+	result = await convert(source, target, value);
+	expect(result.value).toEqual(5);
+
+
+	source = 'PLN';
+	target = 'GBP';
+	value = 6;
+
+	result = await convert(source, target, value);
+	expect(result.value).toEqual(1.146);
 });
 
+test('it caches API result', async () => {
+	const fetch = R.always(Promise.resolve({
+		json: jest.fn(R.always(successAPIResponse))
+	}));
+	const storage = new MemoryStorage();
 
-test('successful call to API', async () => {
-	const fetch = R.always(Promise.resolve(createResponse(successAPIResponse)));
-	const actualResponse = await getRatesFromAPI(fetch);
+	const convert = ExchangeCurrency(fetch, storage);
+	await convert('PLN', 'USD', 12)
+	await convert('PHP', 'USD', 300)
+	await convert('PLN', 'GBP', 15);
 
-	expect(actualResponse.right()).toBeTruthy();
-	expect(actualResponse.value).toEqual({
-		base: successAPIResponse.base,
-		rates: {
-			'GBP': 0.807,
-			'PLN': 4.229,
-			'PHP': 50.817,
-			'USD': 1,
-		},
-	});
+	expect(fetch).toHaveBeenCalledTimes(1);
+	expect(JSON.parse(storage.getItem('currencies-rates')).value).toEqual(successAPIResponse);
 });
 
-test('failure call to API', async () => {
-	const response = {
-		success: false,
-		error: {
-			code: 105,
-			type: "base_currency_access_restricted"
-		}
-	}
+test('it handles API error gracefully', async () => {
+	const fetch = R.always(Promise.reject('some error'));
+	const storage = new MemoryStorage();
 
-	const fetch = R.always(Promise.resolve(createResponse(response)));
-	const actualResponse = await getRatesFromAPI(fetch);
+	const convert = ExchangeCurrency(fetch, storage);
 
-	expect(actualResponse.left()).toBeTruthy();
-	expect(actualResponse.value).toEqual({
-		code: 105,
-		type: "base_currency_access_restricted"
-	});
+	const result = convert('PLN', 'USD', 12);
+	expect(result.isLeft()).toBeTruthy();
+	expect('some error', result.value);
 });
