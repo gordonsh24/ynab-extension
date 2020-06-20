@@ -13,6 +13,9 @@
   ],
   "plugins": [
     "@babel/plugin-transform-arrow-functions",
-    ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]
+    ["import", {
+      "libraryName" : "antd",
+      "style" : "css"
+    }]
   ]
 }
