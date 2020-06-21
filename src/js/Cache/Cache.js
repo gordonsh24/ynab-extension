@@ -31,7 +31,7 @@ export default class Cache {
 	}
 
 	async execAsync(key, ttl, fn) {
-		return this.get(key).orLazy(() => fn().then(R.tap(val => this.set(key, val, ttl))).catch(err => err));
+		return this.get(key).orLazy(() => fn().then(R.tap(val => this.set(key, val, ttl))));
 	}
 
 	del(key) {

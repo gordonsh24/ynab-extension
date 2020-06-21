@@ -56,7 +56,7 @@ test('it converts currencies', async () => {
 });
 
 test('it caches API result', async () => {
-	const fetch = R.always(Promise.resolve({
+	const fetch = jest.fn(() => Promise.resolve({
 		json: jest.fn(R.always(successAPIResponse))
 	}));
 	const storage = new MemoryStorage();
@@ -71,12 +71,12 @@ test('it caches API result', async () => {
 });
 
 test('it handles API error gracefully', async () => {
-	const fetch = R.always(Promise.reject('some error'));
+	const fetch = () => Promise.reject('some error');
 	const storage = new MemoryStorage();
 
 	const convert = ExchangeCurrency(fetch, storage);
 
-	const result = convert('PLN', 'USD', 12);
+	const result = await convert('PLN', 'USD', 12);
 	expect(result.isLeft()).toBeTruthy();
-	expect('some error', result.value);
+	expect(result.value).toBe('some error');
 });

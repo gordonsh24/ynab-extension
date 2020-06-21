@@ -113,9 +113,12 @@ test('it does not cache when async FN throws error', async () => {
 	const storage = new MemoryStorage();
 
 	const subject = new Cache(storage);
-	const result = await subject.execAsync(key, ttl, fn);
+	try {
+		const result = await subject.execAsync(key, ttl, fn);
+	} catch (err) {
+		expect(err).toEqual(error);
+	}
 
-	expect(result).toEqual(error);
 	expect(fn).toHaveBeenCalled();
 	expect(storage.getItem(key)).toBeNull();
 });
