@@ -5,3 +5,12 @@ Enzyme.configure({
 	adapter: new Adapter()
 });
 
+Object.defineProperty(window, 'matchMedia', {
+	value: () => ({
+		matches: false,
+		addListener: () => {
+		},
+		removeListener: () => {
+		}
+	})
+});
