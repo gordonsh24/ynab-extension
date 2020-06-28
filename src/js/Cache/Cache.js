@@ -14,7 +14,7 @@ export default class Cache {
 	}
 
 	set(key, value, ttl = 0) {
-		const expires = ttl > 0 ? currentTimestamp() + ttl : null;
+		const expires = ttl > 0 ? currentTimestamp() + ttl*1000 : null;
 
 		this.storage.setItem(key, JSON.stringify({expires, value}));
 	}
