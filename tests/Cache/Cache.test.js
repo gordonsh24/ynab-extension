@@ -1,6 +1,5 @@
-import Cache from '../../src/js/Cache/Cache';
+import Cache, {liftAsync} from '../../src/js/Cache/Cache';
 import MemoryStorage from '../../src/js/Cache/MemoryStorage';
-import {Maybe, Some, None} from "monet";
 
 test('it gets value with valid ttl', () => {
 	const storage = new MemoryStorage();
@@ -140,4 +139,28 @@ test('it executes async FN if result is not stored in cache yet', async () => {
 
 	expect(result).toEqual(data);
 	expect(fn).not.toHaveBeenCalled();
+});
+
+test('it lifts async FN', async () => {
+	const key = 'my-key';
+	const data = 'Some text';
+	const ttl = 3600;
+
+	const fn = jest.fn((num) => Promise.resolve(data + " " + num));
+
+	const storage = new MemoryStorage();
+	const cache = new Cache(storage);
+
+	const liftedFN = liftAsync(cache, key, ttl, fn);
+
+	const expectedData = "Some text 102";
+
+	let result = await liftedFN('102');
+	expect(result).toEqual(expectedData);
+	expect(JSON.parse(storage.getItem(key)).value).toEqual(expectedData);
+
+	result = await liftedFN('102');
+	expect(result).toEqual(expectedData);
+
+	expect(fn).toHaveBeenCalledTimes(1);
 });

@@ -1,5 +1,8 @@
 import {action, createStore, thunk} from 'easy-peasy';
 import {getCategories, getFirstBudgetId, ynabAPI} from "../YNAB";
+import {create, liftAsync} from "../Cache/Cache";
+
+const cache = create(localStorage);
 
 export const categoriesModel = {
 	items: [],
@@ -25,5 +28,9 @@ export const model = {
 };
 
 export default createStore(model, {
-	injections: {ynabAPI, getCategories, getFirstBudgetId}
+	injections: {
+		ynabAPI,
+		getCategories: liftAsync(cache, 'getCategories', 3600, getCategories),
+		getFirstBudgetId: liftAsync(cache, 'getFirstBudgetId', 3600, getFirstBudgetId)
+	}
 });
