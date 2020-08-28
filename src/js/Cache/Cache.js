@@ -48,4 +48,4 @@ export const get = R.curryN(2, (cache, key) => cache.get(key));
 export const set = R.curryN(4, (cache, key, value, ttl = 0) => cache.set(key, key, value));
 export const exec = R.curryN(3, (cache, key, ttl, fn) => cache.exec(key, ttl, fn));
 export const execAsync = R.curryN(3, async (cache, key, ttl, fn) => cache.execAsync(key, ttl, fn));
-export const liftAsync = (cache, key, ttl, fn) => (...args) => execAsync(cache, key, ttl, () => fn(...args));
+export const liftAsync = R.curryN(4, (cache, key, ttl, fn) => (...args) => execAsync(cache, key, ttl, () => fn(...args)));
